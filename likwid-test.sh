@@ -3,7 +3,8 @@ source likwid-common.sh
 
 #### GLOBALS #############################################################################
 readonly DIR="data/raw"  # mkdir -p dirpath
-readonly WORKLOAD_ARRAY=(copy copy_avx copy_mem daxpy daxpy_avx daxpy_mem_avx daxpy_mem_avx_fma ddot ddot_avx update sum stream stream_avx stream_mem stream_mem_avx triad triad_avx triad_avx_fma triad_mem_avx triad_mem_avx_fma)
+# readonly WORKLOAD_ARRAY=(copy copy_avx copy_mem daxpy daxpy_avx daxpy_mem_avx daxpy_mem_avx_fma ddot ddot_avx update sum stream stream_avx stream_mem stream_mem_avx triad triad_avx triad_avx_fma triad_mem_avx triad_mem_avx_fma)
+readonly WORKLOAD_ARRAY=(copy copy_mem daxpy daxpy_avx daxpy_mem_avx stream stream_avx stream_mem triad triad_mem_avx)
 readonly FREQUENCY_ARRAY=(0.8 1.0 1.3 1.5 1.8 2.0 2.2 2.5 2.7 2.9 3.0 3.2)
 readonly NUM_THREAD=(1 2 3 4)
 
@@ -62,22 +63,22 @@ function testing {
 
         echo -e "$(MSG) Test (1GB): $t frequency: $f GHz num_thread: $c"
         t_start=`date +%s`
-        # run_test $t $c $f 1GB 768
+        run_test $t $c $f 1GB 768
         echo -e "$(MSG) Test Duration: $(($(date +%s)-$t_start)) seconds"
         
         echo -e "$(MSG) Test (128MB): $t frequency: $f GHz num_thread: $c"
         t_start=`date +%s`
-        # run_test $t $c $f 128MB 6144
+        run_test $t $c $f 128MB 6144
         echo -e "$(MSG) Test Duration: $(($(date +%s)-$t_start)) seconds"
         
         echo -e "$(MSG) Test (1MB): $t frequency: $f GHz num_thread: $c"
         t_start=`date +%s`
-        # run_test $t $c $f 1MB 150000
+        run_test $t $c $f 1MB 200000
         echo -e "$(MSG) Test Duration: $(($(date +%s)-$t_start)) seconds"
         
         echo -e "$(MSG) Test (64kB): $t frequency: $f GHz num_thread: $c"
         t_start=`date +%s`
-        # run_test $t $c $f 64kB 600000
+        run_test $t $c $f 64kB 800000
         echo -e "$(MSG) Test Duration: $(($(date +%s)-$t_start)) seconds"
 
       done
