@@ -6,8 +6,8 @@ readonly DIR="data/raw"  # mkdir -p dirpath
 readonly WORKLOAD_ARRAY=(copy)  # copy_mem daxpy daxpy_avx daxpy_mem_avx stream stream_avx stream_mem triad triad_mem_avx copy_sse daxpy_sse stream_sp_avx_fma ddot_sp update )
 #readonly FREQUENCY_ARRAY=(1.0 1.1 1.2 1.3 1.4 1.5 1.6 1.7 1.8 1.9 2.0 2.1 2.2)
 #readonly NUM_THREAD=(1 2 4 5 6 8 10 12 14 15 16 18 20)
-readonly FREQUENCY_ARRAY=(1.0 2.2)
-readonly NUM_THREAD=(1 10 20)
+readonly FREQUENCY_ARRAY=(2.2)
+readonly NUM_THREAD=(4)
 
 
 #######################################
@@ -20,7 +20,7 @@ readonly NUM_THREAD=(1 10 20)
 #   $2: (int) number of cores
 #   $3: (str) frequency [expressed in GHz]
 #   $4: (str) working size [kB, MB, GB]
-#   $5: (int) number of iterations
+#   $5: (int) minimum duration in seconds
 # Returns:
 #   None
 #######################################
@@ -64,17 +64,17 @@ function testing {
 
         echo -e "$(MSG) Test (1GB): $t frequency: $f GHz num_thread: $c"
         t_start=`date +%s`
-        run_test $t $c $f 1GB 6  # 768
+        run_test $t $c $f 1GB 5  # 768
         echo -e "$(MSG) Test Duration: $(($(date +%s)-$t_start)) seconds"
         
         echo -e "$(MSG) Test (128MB): $t frequency: $f GHz num_thread: $c"
         t_start=`date +%s`
-        run_test $t $c $f 128MB 6  # 6144
+        run_test $t $c $f 128MB 5  # 6144
         echo -e "$(MSG) Test Duration: $(($(date +%s)-$t_start)) seconds"
         
         echo -e "$(MSG) Test (1MB): $t frequency: $f GHz num_thread: $c"
         t_start=`date +%s`
-        run_test $t $c $f 1MB 6
+        run_test $t $c $f 1MB 5
         echo -e "$(MSG) Test Duration: $(($(date +%s)-$t_start)) seconds"
         
         echo -e "$(MSG) Test (64kB): $t frequency: $f GHz num_thread: $c"
