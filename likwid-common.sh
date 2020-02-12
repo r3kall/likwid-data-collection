@@ -75,8 +75,7 @@ function setgov {
 #   None
 #######################################
 function setfreq {
-  # cpupower --cpu all frequency-set -f $1 > /dev/null
-  echo $1 > /sys/devices/system/cpu/cpu*/cpufreq/scaling_setspeed
+  cpupower --cpu all frequency-set -f $1 > /dev/null
 }
 
 

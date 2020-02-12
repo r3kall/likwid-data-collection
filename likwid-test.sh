@@ -4,7 +4,7 @@ source likwid-common.sh
 #### GLOBALS #############################################################################
 readonly DIR="data/raw"  # mkdir -p dirpath
 readonly WORKLOAD_ARRAY=(copy)  # copy_mem daxpy daxpy_avx daxpy_mem_avx stream stream_avx stream_mem triad triad_mem_avx copy_sse daxpy_sse stream_sp_avx_fma ddot_sp update )
-readonly FREQUENCY_ARRAY=(1000000 1200000)  # 1300000 1400000 1500000 1600000 1700000 1800000 1900000 2000000 2100000 2200000)
+readonly FREQUENCY_ARRAY=(1.00 1.20)  # 1300000 1400000 1500000 1600000 1700000 1800000 1900000 2000000 2100000 2200000)
 readonly NUM_THREAD=(1 4)
 
 
@@ -16,7 +16,7 @@ readonly NUM_THREAD=(1 4)
 # Arguments:
 #   $1: (str) test name [ref: likwid-bench -a]
 #   $2: (int) number of cores
-#   $3: (flt) frequency [expressed in GHz]
+#   $3: (str) frequency [expressed in GHz]
 #   $4: (str) working size [kB, MB, GB]
 #   $5: (int) number of iterations
 # Returns:
@@ -44,7 +44,7 @@ function testing {
   # start total time
   local start=`date +%s`
   # disable c states
-  # disable_c_states
+  disable_c_states
   # disabling turbo boost
   disableboost
   # setting governor
@@ -56,7 +56,7 @@ function testing {
   local t_start
   for f in "${FREQUENCY_ARRAY[@]}"; do
     # setting cpu frequency
-    setfreq $f
+    setfreq "${f}GHz"
     for c in "${NUM_THREAD[@]}"; do
       for t in "${WORKLOAD_ARRAY[@]}"; do
 
@@ -85,7 +85,7 @@ function testing {
   done
 
   # enable c states
-  # enable_c_states
+  enable_c_states
   # re-setting governor and boost
   # setgov performance
   enableboost
@@ -100,7 +100,7 @@ function testing {
 function control_c {
   echo -en "\n#### Caught SIGINT; Clean up and Exit \n"
   # enable c states
-  # enable_c_states
+  enable_c_states
   # re-setting governor and boost
   # setgov performance
   enableboost
