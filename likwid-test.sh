@@ -23,8 +23,8 @@ readonly NUM_THREAD=(1 4)
 #   None
 #######################################
 function run_test {
-  # local CS=$(( $2 - 1))  -C 0-$CS
-  $LIKWID -T 100ms -o $DIR/$1-$2-$3-$4.csv  likwid-bench -t $1 -w S0:$4:$2 -s $5 > "$DIR/$1-$2-$3-$4.stdout" 2> /dev/null
+  local CS=$(( $2 - 1)) 
+  $LIKWID -T 100ms -o $DIR/$1-$2-$3-$4.csv -C 0-$CS  likwid-bench -t $1 -w N:$4 -s $5 > "$DIR/$1-$2-$3-$4.stdout" 2> /dev/null
 }
 
 
