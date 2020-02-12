@@ -31,4 +31,4 @@ fi
 
 # Check the module 'cpufreq_userspace' (to enable userspace scaling policy).
 checkModule 'cpufreq_userspace'
-
+echo -e "$(date) $0 END"
