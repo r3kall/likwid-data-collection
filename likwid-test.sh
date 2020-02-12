@@ -75,10 +75,10 @@ function testing {
         run_test $t $c $f 1MB 6
         echo -e "$(MSG) Test Duration: $(($(date +%s)-$t_start)) seconds"
         
-        echo -e "$(MSG) Test (64kB): $t frequency: $f GHz num_thread: $c"
-        t_start=`date +%s`
-        run_test $t $c $f 64kB 6
-        echo -e "$(MSG) Test Duration: $(($(date +%s)-$t_start)) seconds"
+        #echo -e "$(MSG) Test (64kB): $t frequency: $f GHz num_thread: $c"
+        #t_start=`date +%s`
+        #run_test $t $c $f 64kB 6
+        #echo -e "$(MSG) Test Duration: $(($(date +%s)-$t_start)) seconds"
 
       done
     done
