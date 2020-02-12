@@ -4,10 +4,8 @@ source likwid-common.sh
 #### GLOBALS #############################################################################
 readonly DIR="data/raw"  # mkdir -p dirpath
 readonly WORKLOAD_ARRAY=(copy)  # copy_mem daxpy daxpy_avx daxpy_mem_avx stream stream_avx stream_mem triad triad_mem_avx copy_sse daxpy_sse stream_sp_avx_fma ddot_sp update )
-#readonly FREQUENCY_ARRAY=(1.0 1.1 1.2 1.3 1.4 1.5 1.6 1.7 1.8 1.9 2.0 2.1 2.2)
-#readonly NUM_THREAD=(1 2 4 5 6 8 10 12 14 15 16 18 20)
-readonly FREQUENCY_ARRAY=(1.5 2.2)
-readonly NUM_THREAD=(5 10)
+readonly FREQUENCY_ARRAY=(1.0 1.1 1.2 1.3 1.4 1.5 1.6 1.7 1.8 1.9 2.0 2.1 2.2)
+readonly NUM_THREAD=(1 2 4 5 6 8 10 12 14 15 16 18 20)
 
 
 #######################################
