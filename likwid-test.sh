@@ -3,10 +3,9 @@ source likwid-common.sh
 
 #### GLOBALS #############################################################################
 readonly DIR="data/raw"  # mkdir -p dirpath
-# readonly WORKLOAD_ARRAY=(copy copy_avx copy_mem daxpy daxpy_avx daxpy_mem_avx daxpy_mem_avx_fma ddot ddot_avx update sum stream stream_avx stream_mem stream_mem_avx triad triad_avx triad_avx_fma triad_mem_avx triad_mem_avx_fma)
-readonly WORKLOAD_ARRAY=(copy copy_mem daxpy daxpy_avx daxpy_mem_avx stream stream_avx stream_mem triad triad_mem_avx)
-readonly FREQUENCY_ARRAY=(0.8 1.0 1.3 1.5 1.8 2.0 2.2 2.5 2.7 2.9 3.0 3.2)
-readonly NUM_THREAD=(1 2 3 4)
+readonly WORKLOAD_ARRAY=(copy)  # copy_mem daxpy daxpy_avx daxpy_mem_avx stream stream_avx stream_mem triad triad_mem_avx copy_sse daxpy_sse stream_sp_avx_fma ddot_sp update )
+readonly FREQUENCY_ARRAY=(1000000 1200000)  # 1300000 1400000 1500000 1600000 1700000 1800000 1900000 2000000 2100000 2200000)
+readonly NUM_THREAD=(1 4)
 
 
 #######################################
@@ -24,8 +23,8 @@ readonly NUM_THREAD=(1 2 3 4)
 #   None
 #######################################
 function run_test {
-  local CS=$(( $2 - 1))
-  $LIKWID -T 100ms -o $DIR/$1-$2-$3-$4.csv -C 0-$CS likwid-bench -t $1 -w S0:$4 -i $5 > "$DIR/$1-$2-$3-$4.stdout" 2> /dev/null
+  # local CS=$(( $2 - 1))  -C 0-$CS
+  $LIKWID -T 100ms -o $DIR/$1-$2-$3-$4.csv  likwid-bench -t $1 -w S0:$4:$2 -s $5 > "$DIR/$1-$2-$3-$4.stdout" 2> /dev/null
 }
 
 
@@ -45,11 +44,11 @@ function testing {
   # start total time
   local start=`date +%s`
   # disable c states
-  disable_c_states
+  # disable_c_states
   # disabling turbo boost
   disableboost
   # setting governor
-  setgov userspace
+  # setgov userspace
   # number of workloads
   local len=${#WORKLOAD_ARRAY[@]}
   echo -e "$(MSG) Number of Workloads to profile: $len"
@@ -57,28 +56,28 @@ function testing {
   local t_start
   for f in "${FREQUENCY_ARRAY[@]}"; do
     # setting cpu frequency
-    setfreq "${f}GHz"
+    setfreq $f
     for c in "${NUM_THREAD[@]}"; do
       for t in "${WORKLOAD_ARRAY[@]}"; do
 
-        echo -e "$(MSG) Test (1GB): $t frequency: $f GHz num_thread: $c"
-        t_start=`date +%s`
-        run_test $t $c $f 1GB 768
-        echo -e "$(MSG) Test Duration: $(($(date +%s)-$t_start)) seconds"
+        #echo -e "$(MSG) Test (1GB): $t frequency: $f GHz num_thread: $c"
+        #t_start=`date +%s`
+        #run_test $t $c $f 1GB 768
+        #echo -e "$(MSG) Test Duration: $(($(date +%s)-$t_start)) seconds"
         
-        echo -e "$(MSG) Test (128MB): $t frequency: $f GHz num_thread: $c"
-        t_start=`date +%s`
-        run_test $t $c $f 128MB 6144
-        echo -e "$(MSG) Test Duration: $(($(date +%s)-$t_start)) seconds"
+        #echo -e "$(MSG) Test (128MB): $t frequency: $f GHz num_thread: $c"
+        #t_start=`date +%s`
+        #run_test $t $c $f 128MB 6144
+        #echo -e "$(MSG) Test Duration: $(($(date +%s)-$t_start)) seconds"
         
         echo -e "$(MSG) Test (1MB): $t frequency: $f GHz num_thread: $c"
         t_start=`date +%s`
-        run_test $t $c $f 1MB 200000
+        run_test $t $c $f 1MB 6
         echo -e "$(MSG) Test Duration: $(($(date +%s)-$t_start)) seconds"
         
         echo -e "$(MSG) Test (64kB): $t frequency: $f GHz num_thread: $c"
         t_start=`date +%s`
-        run_test $t $c $f 64kB 800000
+        run_test $t $c $f 64kB 6
         echo -e "$(MSG) Test Duration: $(($(date +%s)-$t_start)) seconds"
 
       done
@@ -86,9 +85,9 @@ function testing {
   done
 
   # enable c states
-  enable_c_states
+  # enable_c_states
   # re-setting governor and boost
-  setgov performance
+  # setgov performance
   enableboost
 
   # end total time
@@ -101,9 +100,9 @@ function testing {
 function control_c {
   echo -en "\n#### Caught SIGINT; Clean up and Exit \n"
   # enable c states
-  enable_c_states
+  # enable_c_states
   # re-setting governor and boost
-  setgov performance
+  # setgov performance
   enableboost
   exit $?
 }

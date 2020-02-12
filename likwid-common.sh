@@ -1,7 +1,7 @@
 #!/bin/bash
 
 #### GLOBALS #############################################################################
-LIKWID_USER="lnz"
+LIKWID_USER="rutigliano"
 GROUP_ARRAY=($(likwid-perfctr -a | tail -n +3 | cut -b 1-15))
 GROUP_FLAGS=$(printf -- "-g %s " "${GROUP_ARRAY[@]}")
 LIKWID="likwid-perfctr $GROUP_FLAGS -M 0"
@@ -70,12 +70,13 @@ function setgov {
 # Globals:
 #   None
 # Arguments:
-#   (float) frequency [refer to 'cpupower frequency-info']
+#   (int) frequency [refer to 'cpupower frequency-info']
 # Returns:
 #   None
 #######################################
 function setfreq {
-  cpupower --cpu all frequency-set -f $1 > /dev/null
+  # cpupower --cpu all frequency-set -f $1 > /dev/null
+  bash -c "echo $1 > /sys/devices/system/cpu/cpu*/cpufreq/scaling_setspeed"
 }
 
 
